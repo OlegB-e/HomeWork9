@@ -14,13 +14,9 @@ fetch('dishes.json')
         return response.json();
       })
       .then(ingredientPrices => {
-        const hasVegetarianDish = dishes.some(dish => {
-          return dish.ingredients.some(ingredient => 
-            ingredient !== 'meat' && 
-            ingredient !== 'dough' && 
-            ingredient !== 'cheese'
-          );
-        });
+        const isVegetarian = dish => !dish.ingredients.includes('meat');
+
+        const hasVegetarianDish = dishes.some(isVegetarian);
 
         if (hasVegetarianDish) {
           console.log("в меню есть хотя бы одно вегетарианское блюдо.");
@@ -28,9 +24,7 @@ fetch('dishes.json')
           console.log("в меню нет вегетарианских блюд.");
         }
 
-        const isFullyVegetarianMenu = dishes.every(dish => {
-          return dish.ingredients.every(ingredient => ingredient !== 'meat');
-        });
+        const isFullyVegetarianMenu = dishes.every(isVegetarian);
 
         if (isFullyVegetarianMenu) {
           console.log("полностью вегетарианское меню.");
@@ -38,9 +32,7 @@ fetch('dishes.json')
           console.log("не полностью вегетарианское меню.");
         }
 
-        const vegetarianDishes = dishes.filter(dish => {
-          return dish.ingredients.every(ingredient => ingredient !== 'meat');
-        });
+        const vegetarianDishes = dishes.filter(isVegetarian);
 
         console.log("Вегетарианские блюда:", vegetarianDishes);
 
@@ -59,3 +51,4 @@ fetch('dishes.json')
   .catch(error => {
     console.error('Ошибка при выполнении fetch dishes.json:', error);
   });
+  
